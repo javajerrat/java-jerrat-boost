@@ -57,6 +57,15 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.7.26</version>
     </dependency>
+
+    <dependency>
+      <!-- https://github.com/JetBrains/java-annotations
+      Thanks for: https://stackoverflow.com/questions/37009549/can-one-automatically-get-intellijs-regex-assistance-for-ones-own-regex-parame
+       -->
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>17.0.0</version>
+    </dependency>
   </dependencies>
 
 
