@@ -66,6 +66,15 @@
       <artifactId>annotations</artifactId>
       <version>17.0.0</version>
     </dependency>
+
+    <!-- junit5 -->
+    <dependency>
+      <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.5.0-M1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 

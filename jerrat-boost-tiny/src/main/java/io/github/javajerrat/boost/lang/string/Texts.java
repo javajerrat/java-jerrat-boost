@@ -18,10 +18,10 @@ import com.google.common.base.CaseFormat;
 import io.github.javajerrat.boost.lang.string.enums.SimilarityAlgorithmEnum;
 import javax.validation.constraints.NotNull;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.WordUtils;
 import org.apache.commons.text.diff.StringsComparator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author Frapples <isfrapples@outlook.com>
@@ -75,7 +75,7 @@ public class Texts {
      */
     @SneakyThrows
     public static void diff(@NotNull String left, @NotNull String right) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
 }

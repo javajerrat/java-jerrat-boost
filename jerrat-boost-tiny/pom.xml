@@ -47,6 +47,14 @@
       <artifactId>commons-text</artifactId>
       <version>1.6</version>
     </dependency>
+
+    <!-- jooq -->
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jool-java-8</artifactId>
+      <version>0.9.14</version>
+    </dependency>
+
     <dependency>
       <!-- JSR303 -->
       <groupId>javax.validation</groupId>
