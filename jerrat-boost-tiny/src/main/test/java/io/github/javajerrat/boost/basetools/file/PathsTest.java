@@ -12,36 +12,28 @@
  * limitations under the License.
  */
 
-package io.github.javajerrat.boost.lang.io;
+
+package io.github.javajerrat.boost.basetools.file;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
 import org.junit.jupiter.api.Test;
 
 /**
  * @author Frapples <isfrapples@outlook.com>
- * @date 2019/7/26
+ * @date 2019/12/23
  */
-class IOsTest {
+class PathsTest {
 
     @Test
-    void foreachLines() throws IOException {
-        Reader reader = IOs.toReader("a cat on the sit\n this is a test line\n");
-        IOs.foreachLines(reader, (i, line) -> {
-            System.out.println(i + " " + line);
-            return true;
-        });
+    void expanduser() {
     }
 
     @Test
-    void lines() {
-        BufferedReader bufferedReader = IOs.toBufferedReader(IOs.toReader("a cat on the sit\n this is a test line\n"));
-        for (String line : IOs.lines(bufferedReader)) {
-            System.out.println(line);
-        }
-
+    void expandvars() {
+        System.out.println(Paths.expandvars("/test/$JAVA_HOME/abc/$a"));
+        System.out.println(Paths.expandvars("/test/${JAVA_HOME/abc/$a"));
+        System.out.println(Paths.expandvars("/test/$JAVA_HOME}/abc/$a"));
+        System.out.println(Paths.expandvars("/test/${JAVA_HOME}/abc/$a"));
     }
 }

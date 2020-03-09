@@ -15,9 +15,14 @@
 
 package io.github.javajerrat.boost.basetools.file;
 
+import com.google.common.annotations.Beta;
+import io.github.javajerrat.boost.lang.string.Strings;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Frapples <isfrapples@outlook.com>
@@ -27,48 +32,107 @@ import org.apache.commons.io.FilenameUtils;
  */
 public class Paths {
 
-    public static final char SEP = System.getProperty("file.separator").charAt(0);
+    public static final char SEPARATOR = File.separatorChar;
 
-    private static final List<Character> ALL_SEP = Arrays.asList('/', '\\', SEP);
+    private static final List<Character> ALL_SEPARATOR = Arrays.asList('/', '\\', SEPARATOR);
+
+    /**
+     * If path starts with ~, replace it with home directory.
+     * TODO: This function currently cannot handle syntax like {@code ~user}
+     *
+     *  @param path Replaced path
+     * @return A string representing the processed path
+     */
+    @Beta
+    @NotNull
+    public static String expanduser(@NotNull String path) {
+        String user = System.getProperty("user.home");
+        return path.replaceFirst("~", user);
+    }
+
+    private static Pattern varPattern = Pattern.compile("\\$(\\{?)([a-zA-Z0-9_]+)(}?)");
+
+    /**
+     * This function replaces environment variables that appear in the path.
+     * If the relevant environment variable is not found, it will not be replaced.
+     * The syntax of the environment variable is {@code $DEMOVAR } or {@code ${DEMOVAR}}.
+     *
+     * @param path Replace path
+     * @return  A string representing the processed path
+     */
+    @Beta
+    @NotNull
+    public static String expandvars(@NotNull String path) {
+        return Strings.regReplace(path, varPattern, (matches, index) -> {
+            String all = matches.group(0);
+            String leftBrace = matches.group(1);
+            String var = matches.group(2);
+            String rightBrace = matches.group(3);
+            if (leftBrace.isEmpty() == rightBrace.isEmpty()) {
+                String value = System.getenv(var);
+                return value != null ? value : all;
+            } else if (leftBrace.isEmpty()) {
+                String value = System.getenv(var);
+                return value != null ? value + rightBrace : all;
+            } else {
+                return all;
+            }
+        });
+    }
 
 
-    public static String join(String... seg) {
-        if (seg == null || seg.length == 0) {
+    /**
+     *
+     * Join two or more pathname components, inserting '/' as needed.
+     * @param components pathname components
+     * @return path
+     */
+    public static String join(String... components) {
+        if (components == null || components.length == 0) {
             return "";
         }
 
         StringBuilder path = new StringBuilder();
-        for (int i = 0; i < seg.length; i++) {
-            String s = seg[i];
+        for (int i = 0; i < components.length; i++) {
+            String s = components[i];
             if (s.length() > 0) {
                 int first = 0;
                 int end = s.length() - 1;
-                if (ALL_SEP.contains(s.charAt(first))) {
+                if (ALL_SEPARATOR.contains(s.charAt(first))) {
                     first++;
                 }
-                if (ALL_SEP.contains(s.charAt(end))) {
+                if (ALL_SEPARATOR.contains(s.charAt(end))) {
                     end--;
                 }
                 path.append(s, first, end + 1);
-                if (i != seg.length - 1) {
-                    path.append(SEP);
+                if (i != components.length - 1) {
+                    path.append(SEPARATOR);
                 }
             }
         }
         return path.toString();
     }
 
+    /**
+     * @param path pathname
+     * @return Returns the directory component of a pathname
+     */
     public static String dirname(String path) {
         if (path == null || path.isEmpty()) {
             return "";
         }
 
-        if (ALL_SEP.contains(path.charAt(path.length() - 1))) {
+        if (ALL_SEPARATOR.contains(path.charAt(path.length() - 1))) {
             path = path.substring(0, path.length() - 1);
         }
         return FilenameUtils.getFullPath(path);
     }
 
+    /**
+     * @param path the file path
+     * @return the name of the file without the path, or an empty string if none exists.
+     * Null bytes inside string will be removed
+     */
     public static String basename(String path) {
         return FilenameUtils.getName(path);
     }

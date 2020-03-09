@@ -12,28 +12,18 @@
  * limitations under the License.
  */
 
+package io.github.javajerrat.boost.basetools.datetime;
 
-package io.github.javajerrat.boost.lang.debug;
+import java.time.ZoneId;
+import java.util.TimeZone;
 
-import lombok.SneakyThrows;
-import org.jooq.lambda.fi.util.function.CheckedSupplier;
+public class Zones {
 
-/**
- * @author Frapples <isfrapples@outlook.com>
- * @date 2019/6/25
- */
+    public static final TimeZone UTC_ZONE = TimeZone.getTimeZone("UTC");
 
-public class LazyString {
-    private final CheckedSupplier<?> stringSupplier;
+    public static final ZoneId UTC_ID = ZoneId.of("UTC");
 
+    public static final TimeZone ASIA_SHANGHAI_ZONE = TimeZone.getTimeZone("Asia/Shanghai");
 
-    LazyString(final CheckedSupplier<?> stringSupplier) {
-        this.stringSupplier = stringSupplier;
-    }
-
-    @Override
-    @SneakyThrows
-    public String toString() {
-        return String.valueOf(stringSupplier.get());
-    }
+    public static final ZoneId ASIA_SHANGHAI_ID = ZoneId.of("Asia/Shanghai");
 }

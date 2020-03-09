@@ -12,36 +12,31 @@
  * limitations under the License.
  */
 
-package io.github.javajerrat.boost.lang.io;
+package io.github.javajerrat.boost.basetools.datetime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 
 /**
  * @author Frapples <isfrapples@outlook.com>
- * @date 2019/7/26
+ * @date 2020/3/9
  */
-class IOsTest {
+class DatesTest {
 
     @Test
-    void foreachLines() throws IOException {
-        Reader reader = IOs.toReader("a cat on the sit\n this is a test line\n");
-        IOs.foreachLines(reader, (i, line) -> {
-            System.out.println(i + " " + line);
-            return true;
-        });
+    void setTime() {
+        Date date = new Date();
+        date = Dates.setTime(date, 8, 0 ,0);
+        System.out.println(Dates.format(date, DateFormats.YYYY_MM_DD_HH_MM_SS_SSS));
+        System.out.println(Dates.getDateTuple(date));
     }
 
-    @Test
-    void lines() {
-        BufferedReader bufferedReader = IOs.toBufferedReader(IOs.toReader("a cat on the sit\n this is a test line\n"));
-        for (String line : IOs.lines(bufferedReader)) {
-            System.out.println(line);
-        }
-
+    void setDate() {
+        Date date = new Date();
+        date = Dates.setDate(date, 2000, 2 ,28);
+        System.out.println(Dates.format(date, DateFormats.YYYY_MM_DD_HH_MM_SS_SSS));
+        System.out.println(Dates.getDateTuple(date));
     }
 }
