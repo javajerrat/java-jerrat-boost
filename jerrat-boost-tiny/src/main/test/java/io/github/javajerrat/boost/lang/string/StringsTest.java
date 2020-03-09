@@ -278,6 +278,17 @@ class StringsTest {
                 assertEquals("Smith, John\nAlice, Tom\n", newStr);
             }
         }
+
+        // Test if the inner implementation handles escapes correctly
+        {
+            Pattern re = Pattern.compile( "^(\\w+)\\s(\\w+)$", Pattern.MULTILINE);
+            String str = "John Smith\nTom Alice\n";
+
+            String newStr = Strings.regReplace(str, re, ((matcher, index) -> {
+                return matcher.group(2) + "$1" + matcher.group(1);
+            }));
+            assertEquals("Smith$1John\nAlice$1Tom\n", newStr);
+        }
     }
 
     @Test

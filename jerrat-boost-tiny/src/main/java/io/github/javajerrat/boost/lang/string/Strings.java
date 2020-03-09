@@ -399,7 +399,8 @@ public class Strings {
             StringBuffer sb = new StringBuffer();
             int index = 0;
             do {
-                m.appendReplacement(sb, replacement.apply(m.toMatchResult(), index++));
+                String replace = replacement.apply(m.toMatchResult(), index++);
+                m.appendReplacement(sb, Matcher.quoteReplacement(replace));
             } while (m.find());
             m.appendTail(sb);
             return sb.toString();
