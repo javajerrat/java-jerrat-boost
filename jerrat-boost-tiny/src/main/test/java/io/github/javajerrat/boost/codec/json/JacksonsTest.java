@@ -18,13 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
 import io.github.javajerrat.boost.basetools.datetime.DateFormats;
 import io.github.javajerrat.boost.lang.collection.Colls;
+import io.github.javajerrat.boost.lang.string.Strings;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -41,7 +48,7 @@ class JacksonsTest {
 
     @SneakyThrows
     @Test
-    public void test() {
+    public void testDate() {
         ObjectMapper jacksonMapper = Jacksons.jacksonObjectMapper();
 
         // Test time zone settings
@@ -73,7 +80,44 @@ class JacksonsTest {
             Date expected = DateUtils.parseDate("2019-01-01 00:00:00", DateFormats.YYYY_MM_DD_HH_MM_SS);
             assertEquals(bean.getTime(), expected);
         }
+    }
 
+    @SneakyThrows
+    @Test
+    void testSerializeNumberAsString() {
+        Map<String, Object> map = new TreeMap<>(Colls.mapOf(
+            "bigDecimal", new BigDecimal("12759475434294793793435"),
+            "bigInteger", new BigInteger("12749795495795794795779"),
+            "integer", Integer.MAX_VALUE,
+            "long", Long.MAX_VALUE,
+            "double", 1.12E+12
+        ));
+
+
+        {
+            String json = Jacksons.DEFAULT_OBJECT_MAPPER.writeValueAsString(map);
+            @Language("json") String excepted = "{\n"
+                + "  \"bigDecimal\" : 12759475434294793793435,\n"
+                + "  \"bigInteger\" : 12749795495795794795779,\n"
+                + "  \"double\" : 1.12E12,\n"
+                + "  \"integer\" : 2147483647,\n"
+                + "  \"long\" : 9223372036854775807\n"
+                + "}";
+            assertEquals(excepted, Strings.replace(json, "\r\n", "\n"));
+        }
+
+        {
+            String json = Jacksons.jacksonObjectMapper(true, true)
+                .writeValueAsString(map);
+            @Language("json") String excepted = "{\n"
+                + "  \"bigDecimal\" : \"12759475434294793793435\",\n"
+                + "  \"bigInteger\" : \"12749795495795794795779\",\n"
+                + "  \"double\" : 1.12E12,\n"
+                + "  \"integer\" : 2147483647,\n"
+                + "  \"long\" : \"9223372036854775807\"\n"
+                + "}";
+            assertEquals(excepted, Strings.replace(json, "\r\n", "\n"));
+        }
     }
 
 }
