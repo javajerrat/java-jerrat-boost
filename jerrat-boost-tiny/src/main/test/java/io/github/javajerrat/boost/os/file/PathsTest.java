@@ -13,9 +13,7 @@
  */
 
 
-package io.github.javajerrat.boost.basetools.file;
-
-import static org.junit.jupiter.api.Assertions.*;
+package io.github.javajerrat.boost.os.file;
 
 import org.junit.jupiter.api.Test;
 

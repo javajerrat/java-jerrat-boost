@@ -13,7 +13,7 @@
  */
 
 
-package io.github.javajerrat.boost.basetools.file;
+package io.github.javajerrat.boost.os.file;
 
 import com.google.common.annotations.Beta;
 import io.github.javajerrat.boost.lang.string.Strings;

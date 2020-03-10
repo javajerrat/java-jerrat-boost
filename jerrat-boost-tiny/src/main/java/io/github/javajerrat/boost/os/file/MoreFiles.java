@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.github.javajerrat.boost.basetools.file;
+package io.github.javajerrat.boost.os.file;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.AbstractIterator;
