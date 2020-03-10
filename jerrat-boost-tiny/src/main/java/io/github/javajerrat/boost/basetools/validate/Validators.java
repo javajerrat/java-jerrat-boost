@@ -32,12 +32,12 @@ import javax.validation.Validator;
 
 public class Validators {
 
-    public static <T> T validateOrThrow(Validator validator, T bean) {
-        validateOrThrow(validator, bean, ValidationException::new);
+    public static <T> T validateOrThrow(Validator validator, T bean, Class<?>... groups) {
+        validateOrThrow(validator, bean, ValidationException::new, groups);
         return bean;
     }
 
-    public static String validateAsErrorString(Validator validator, Object bean) {
+    public static String validateAsErrorString(Validator validator, Object bean, Class<?>... groups) {
         Collection<?> collection;
         if (bean instanceof Collection<?>) {
             collection = (Collection<?>)bean;
@@ -48,7 +48,7 @@ public class Validators {
         }
 
         for (Object item : collection) {
-            Set<ConstraintViolation<Object>> result = validator.validate(item);
+            Set<ConstraintViolation<Object>> result = validator.validate(item, groups);
             if (result.size() > 0) {
                 return result.stream().map(e -> e.getPropertyPath() + e.getMessage())
                     .collect(Collectors.joining(";"));
@@ -57,8 +57,8 @@ public class Validators {
         return null;
     }
 
-    public static <T extends RuntimeException> void validateOrThrow(Validator validator, Object bean, Function<String, ? extends T> function) throws T {
-        String error = validateAsErrorString(validator, bean);
+    public static <T extends RuntimeException> void validateOrThrow(Validator validator, Object bean, Function<String, ? extends T> function, Class<?>... groups) throws T {
+        String error = validateAsErrorString(validator, bean, groups);
         if (error != null) {
             throw function.apply(error);
         }

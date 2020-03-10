@@ -57,12 +57,12 @@ public class ValidationHelper {
         return new ValidationHelper(validator, exceptionSupplier);
     }
 
-    public <T> T validateOrThrow(T bean) {
-        Validators.validateOrThrow(validator, bean, exceptionSupplier);
+    public <T> T validateOrThrow(T bean, Class<?>... groups) {
+        Validators.validateOrThrow(validator, bean, exceptionSupplier, groups);
         return bean;
     }
 
-    public String validateAsErrorString(Object bean) {
-        return Validators.validateAsErrorString(validator, bean);
+    public String validateAsErrorString(Object bean, Class<?>... groups) {
+        return Validators.validateAsErrorString(validator, bean, groups);
     }
 }
